@@ -1,0 +1,412 @@
+/* Базові налаштування */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: #0a0a0a; /* Темний фон для комп'ютера */
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+}
+
+/* Імітація екрану телефону */
+.app-container {
+    width: 100%;
+    max-width: 400px; /* Ширина як у телефону */
+    height: 100%;
+    background-color: #121212; /* Трохи світліший темний для самої програми */
+    position: relative;
+    overflow-y: auto;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.05);
+}
+
+/* Верхня панель (іконки) */
+.header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.search-icon, .notification-icon {
+    width: 40px;
+    height: 40px;
+    background-color: #1c1c1c;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.5), -1px -1px 3px rgba(255,255,255,0.05);
+    font-size: 18px;
+}
+
+/* Заголовок */
+.title-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+h1 {
+    font-size: 22px;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.map-btn {
+    background-color: #1c1c1c;
+    color: #aaaaaa;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+}
+
+/* Кнопки вибору кампусу */
+.zones {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 15px;
+}
+
+/* Приховуємо скроллбар для зон */
+.zones::-webkit-scrollbar {
+    display: none;
+}
+
+.zone-btn {
+    background-color: #1c1c1c;
+    color: #aaaaaa;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 14px;
+    white-space: nowrap;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.5), -1px -1px 3px rgba(255,255,255,0.05);
+    transition: 0.3s;
+}
+
+.zone-btn.active {
+    background-color: #ff3b30; /* Червоний колір активної кнопки */
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 59, 48, 0.4);
+}
+
+/* Нижня панель навігації */
+/* Нижня панель навігації */
+.bottom-nav {
+    position: fixed; /* САМЕ ЦЕ слово (замість absolute) намертво приклеїть меню до низу екрана */
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 360px; /* Щоб на комп'ютері меню не розтягувалося за межі екрана телефону */
+    background-color: #1c1c1c;
+    border-radius: 30px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.9);
+    z-index: 50; /* Щоб меню ЗАВЖДИ було поверх усіх картинок і тексту */
+}
+
+.nav-item {
+    font-size: 20px;
+    color: #666;
+    padding: 10px;
+}
+
+.nav-item.active {
+    color: #ff3b30;
+}
+
+.scan-btn {
+    color: #ff3b30;
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+/* Стилі для списку парковок та карток */
+.parking-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 10px;
+    padding-bottom: 90px; /* Відступ знизу, щоб меню не перекривало картки */
+}
+
+.parking-card {
+    background-color: #1c1c1c;
+    border-radius: 20px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.4), -1px -1px 3px rgba(255,255,255,0.02);
+}
+
+.card-image {
+    height: 140px;
+    border-radius: 15px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.status-badge {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background-color: #ff3b30; /* Червоний як на дизайні */
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(255, 59, 48, 0.4);
+}
+
+.status-badge.full {
+    background-color: #333; /* Сірий, якщо немає місць */
+    box-shadow: none;
+}
+
+.card-info h3 {
+    font-size: 16px;
+    color: #ffffff;
+    margin-bottom: 4px;
+}
+
+.card-info .address {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 4px;
+}
+
+.card-info .price {
+    font-size: 14px;
+    color: #aaaaaa;
+}
+/* Вікно бронювання (Модальне) */
+.modal {
+    display: none; 
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 100;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background-color: #121212;
+    width: 100%;
+    height: 85%;
+    border-radius: 30px 30px 0 0;
+    padding: 25px;
+    position: relative;
+    box-shadow: 0 -10px 25px rgba(255, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+.close-btn {
+    position: absolute;
+    top: 20px; right: 20px;
+    background: #1c1c1c;
+    border: none;
+    color: #ff3b30;
+    width: 35px; height: 35px;
+    border-radius: 50%;
+    font-size: 16px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    cursor: pointer;
+}
+
+#modal-title { font-size: 20px; margin-right: 40px; }
+.modal-subtitle { color: #888; font-size: 14px; margin-bottom: 20px; }
+
+/* Сітка паркувальних місць */
+.spots-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    overflow-y: auto;
+    padding-bottom: 20px;
+    flex-grow: 1;
+}
+.spots-grid::-webkit-scrollbar { display: none; }
+
+.spot-btn {
+    background-color: #1c1c1c;
+    border: 2px solid transparent;
+    border-radius: 15px;
+    padding: 15px;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    transition: 0.2s;
+}
+
+.spot-btn span { font-size: 18px; font-weight: bold; margin-bottom: 5px; }
+.spot-btn small { color: #888; font-size: 12px; }
+
+.spot-btn.occupied {
+    opacity: 0.4;
+    background-color: #2a0808;
+    pointer-events: none; /* Забороняємо клікати на зайняте */
+}
+.spot-btn.occupied small { color: #ff3b30; }
+
+.spot-btn.selected {
+    border-color: #ff3b30;
+    background-color: rgba(255, 59, 48, 0.1);
+    box-shadow: 0 0 15px rgba(255, 59, 48, 0.3);
+}
+
+/* Кнопка підтвердження */
+.booking-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #333;
+}
+
+.price-info { display: flex; flex-direction: column; }
+.price-label { color: #888; font-size: 12px; }
+.price-value { color: #fff; font-size: 18px; font-weight: bold; }
+
+.confirm-btn {
+    background-color: #ff3b30;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 5px 15px rgba(255, 59, 48, 0.4);
+    cursor: pointer;
+}
+/* Місця для викладачів */
+.spot-btn.teacher {
+    border: 1px dashed #ffd700;
+    background-color: rgba(255, 215, 0, 0.05);
+}
+
+.spot-btn.teacher small {
+    color: #ffd700;
+    font-weight: bold;
+}
+
+.spot-btn.teacher.selected {
+    border-style: solid;
+    background-color: rgba(255, 215, 0, 0.2);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+/* Вікно QR-коду */
+.qr-content {
+    align-items: center;
+    justify-content: flex-start;
+    height: 70%;
+    text-align: center;
+}
+
+.qr-container {
+    position: relative;
+    margin-top: 20px;
+    padding: 15px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 0 25px rgba(255, 59, 48, 0.2);
+    display: inline-block;
+}
+
+.qr-image {
+    width: 200px;
+    height: 200px;
+    display: block;
+}
+
+/* Анімація лазера при скануванні */
+.scan-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #ff3b30;
+    box-shadow: 0 0 15px #ff3b30, 0 0 5px #ff3b30;
+    animation: scan 2s infinite linear;
+}
+
+@keyframes scan {
+    0% { top: 5%; opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { top: 95%; opacity: 0; }
+}
+/* Стилі для вікна профілю */
+.profile-content {
+    height: auto;
+    min-height: 55%;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    color: #888;
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    background-color: #1c1c1c;
+    border: 1px solid #333;
+    color: white;
+    padding: 12px 15px;
+    border-radius: 10px;
+    font-size: 16px;
+    outline: none;
+    transition: 0.3s;
+}
+
+.form-group input:focus {
+    border-color: #ff3b30;
+    box-shadow: 0 0 10px rgba(255, 59, 48, 0.2);
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    background-color: #1c1c1c;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    margin: 0 auto;
+    box-shadow: 0 0 20px rgba(255, 59, 48, 0.2);
+    border: 2px solid #ff3b30;
+}

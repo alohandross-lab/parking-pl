@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parking PŁ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Верхня панель -->
+        <header class="header">
+            <div class="search-icon">🔍</div>
+            <div class="notification-icon" id="bell-btn" style="cursor:pointer; position:relative;">
+                🔔
+                <span id="bell-dot" style="display:none; position:absolute; top:8px; right:8px; width:10px; height:10px; background:#ff3b30; border-radius:50%; box-shadow: 0 0 5px #ff3b30;"></span>
+            </div>
+        </header>
+
+        <!-- Заголовок -->
+        <div class="title-section">
+            <h1>Parking w pobliżu</h1>
+            <button class="map-btn" id="top-map-btn" style="cursor:pointer;">Zobacz na mapie</button>
+        </div>
+
+        <!-- Вибір зон (Кампуси) -->
+        <div class="zones">
+            <button class="zone-btn active" data-zone="all">Wszystkie</button>
+            <button class="zone-btn" data-zone="A">Kampus A</button>
+            <button class="zone-btn" data-zone="B">Kampus B</button>
+            <button class="zone-btn" data-zone="C">Kampus C</button>
+        </div>
+
+        <!-- Список парковок -->
+        <div class="parking-list" id="parking-list">
+            <!-- Сюди парковки будуть додаватися через JavaScript -->
+        </div>
+
+        <!-- Нижня навігація -->
+        <!-- Нижня навігація -->
+        <nav class="bottom-nav">
+            <div class="nav-item active">🗺️</div>
+            <div class="nav-item scan-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
+                    <path d="M17 3h2a2 2 0 0 1 2 2v2"></path>
+                    <path d="M21 17v2a2 2 0 0 1-2 2h-2"></path>
+                    <path d="M7 21H5a2 2 0 0 1-2-2v-2"></path>
+                    <line x1="4" y1="12" x2="20" y2="12" stroke="#ff3b30"></line>
+                </svg>
+                <span style="font-size: 10px; margin-top: 4px;">Skanuj</span>
+            </div>
+            <div class="nav-item">⏱️</div>
+            <div class="nav-item">👤</div>
+        </nav>
+    </div>
+<!-- ВСТАВИТИ ОСЬ ТУТ: Вікно бронювання (приховане) -->
+        <div id="booking-modal" class="modal">
+            <div class="modal-content">
+                <button id="close-modal" class="close-btn">✕</button>
+                <h2 id="modal-title">Nazwa parkingu</h2>
+                <p class="modal-subtitle">Wybierz miejsce</p>
+                
+                <div class="spots-grid" id="spots-grid">
+                    <!-- Місця генеруватимуться тут -->
+                </div>
+                
+                <div class="booking-footer">
+                    <div class="price-info">
+                        <span class="price-label">Cena:</span>
+                        <span id="modal-price" class="price-value">Darmowy</span>
+                    </div>
+                    <button id="confirm-btn" class="confirm-btn">Rezerwuj</button>
+                </div>
+            </div>
+        </div>
+        <!-- Модальне вікно для QR-коду -->
+        <div id="qr-modal" class="modal">
+            <div class="modal-content qr-content">
+                <button id="close-qr" class="close-btn">✕</button>
+                <h2 id="modal-title">Twój bilet</h2>
+                <p class="modal-subtitle">Przyłóż kod do czytnika na szlabanie</p>
+                
+                <div class="qr-container">
+                    <!-- Готовий QR-код генерується через API -->
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=PolitechnikaLodzkaParkingWjazd" alt="QR Code" class="qr-image">
+                    <div class="scan-line"></div>
+                </div>
+                <button id="close-qr-btn" class="confirm-btn" style="margin-top: 30px;">Zakończ</button>
+            </div>
+        </div>
+        <!-- Модальне вікно профілю (Обліковий запис) -->
+        <div id="profile-modal" class="modal">
+            <div class="modal-content profile-content">
+                <button id="close-profile" class="close-btn">✕</button>
+                
+                <!-- Блок реєстрації (показується, якщо немає акаунта) -->
+                <div id="register-section">
+                    <h2 id="modal-title">Stwórz konto</h2>
+                    <p class="modal-subtitle">Zarejestruj się, aby łatwiej parkować</p>
+                    
+                    <div class="form-group">
+                        <label>Imię i nazwisko</label>
+                        <input type="text" id="user-name" placeholder="np. Ołeksandr Skliar">
+                    </div>
+                    <div class="form-group">
+                        <label>Numer rejestracyjny auta</label>
+                        <input type="text" id="car-plate" placeholder="np. EL 12345">
+                    </div>
+                    <button id="save-profile-btn" class="confirm-btn" style="width: 100%; margin-top: 20px;">Zarejestruj się</button>
+                </div>
+
+                <!-- Блок профілю (показується, якщо акаунт створено) -->
+                <div id="user-info-section" style="display: none; text-align: center;">
+                    <div class="profile-avatar">👤</div>
+                    <h2 id="display-name" style="margin-top: 15px; color: white;">Imię</h2>
+                    <p class="modal-subtitle" id="display-plate" style="margin-bottom: 30px;">Rejestracja</p>
+                    <button id="logout-btn" class="confirm-btn" style="background-color: #333; width: 100%; box-shadow: none;">Wyloguj się</button>
+                </div>
+            </div>
+        </div>
+        <!-- Модальне вікно Мапи -->
+        <div id="map-modal" class="modal">
+            <div class="modal-content" style="height: 85%;">
+                <button id="close-map" class="close-btn">✕</button>
+                <h2 style="color:white; margin-bottom: 15px;">Mapa Kampusów PŁ</h2>
+                <div style="width: 100%; height: 100%; border-radius: 15px; overflow: hidden;">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d9878.683526685822!2d19.4533036!3d51.7486828!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471a34d6ba1bcbe3%3A0xc3f1f7d6a599665c!2sPolitechnika%20%C5%81%C3%B3dzka!5e0!3m2!1spl!2spl!4v1700000000000!5m2!1spl!2spl" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальне вікно Таймера (Годинник) -->
+        <div id="timer-modal" class="modal">
+            <div class="modal-content qr-content" style="height: 50%;">
+                <button id="close-timer" class="close-btn">✕</button>
+                <h2 style="color:white;">Czas do wyjazdu</h2>
+                <p class="modal-subtitle" id="timer-parking-name" style="margin-top:10px;">Brak aktywnej rezerwacji</p>
+                <div class="qr-container" style="padding: 20px; font-size: 32px; font-weight: bold; color: #ff3b30; width: 100%; margin-top:20px; text-align:center; background:#1c1c1c; border: 2px solid #333;" id="countdown-display">
+                    -- : -- : --
+                </div>
+                <p style="color: #888; font-size: 14px; margin-top: 15px; text-align:center;" id="timer-deadline-text">Zarezerwuj miejsce, aby zobaczyć czas.</p>
+            </div>
+        </div>
+        
+        <!-- Модальне вікно Сповіщень -->
+        <div id="notification-modal" class="modal">
+            <div class="modal-content profile-content" style="min-height: 40%;">
+                <button id="close-notification" class="close-btn">✕</button>
+                <h2 style="color:white; margin-bottom: 20px;">Powiadomienia</h2>
+                <div id="notification-list" style="color: #aaaaaa; font-size: 14px;">
+                    Brak nowych powiadomień.
+                </div>
+            </div>
+        </div>
+        <!-- Підключаємо зв'язок із сервером -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
+    <script src="script.js"></script>
+</body>
+</html>
